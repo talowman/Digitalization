@@ -1,0 +1,5 @@
+{
+    "sketch": "Digitalization.ino",
+    "board": "arduino:avr:uno",
+    "port": "COM7"
+}
