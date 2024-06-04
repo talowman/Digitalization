@@ -184,7 +184,6 @@ def getArduinoReading(arduino):
   global lastBins
   if data:
     bins = data.decode('ascii').strip().split(' ')
-    print(bins)
     if bins != lastBins:
       lastBins = bins
       for i in range(len(bins)):
@@ -204,11 +203,13 @@ def getArduinoReadingMock():
 
 
 # 1. COLLECTION
+print("Starting camera and arduino")
 arduino = serial.Serial(port='COM7', baudrate=9600, timeout=.1)
-cam = cv2.VideoCapture(0)
+cam = cv2.VideoCapture(1)
 
 detections = []
-while len(detections) < 10:
+print("Starting data collection")
+while len(detections) < 11:
   reading = getArduinoReading(arduino)
   if reading != None:
     result, image = cam.read()
@@ -234,6 +235,8 @@ for d in detections:
   getImagePoints(image)
   calculateImageAngles(image)
   defineErgonomics(image)
+  print(image["ergonomics"])
+  showImage("detection overlay", image["overlay"])
 
 # 3. EVALUATION
 # Go through all detections and evaluate final outcome
@@ -277,7 +280,7 @@ for bin, binInfo in bins.items():
     highestBin = bin
   if count > highestBinCount:
     highestBinCount = count
-    highestestBin = bin
+    highestBin = bin
         
 print(lowestBinCount, " Bin picked least frequently: ", lowestBin)
 print(highestBinCount, " Bin picked most frequently: ", highestBin)
